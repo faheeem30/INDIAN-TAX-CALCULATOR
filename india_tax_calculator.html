@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India Tax Calculator – AY 2025-26</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Baloo+2:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f7f5;
+      --surface: #ffffff;
+      --surface2: #f0f4f0;
+      --border: #d4e0d4;
+      --border2: #c2d6c2;
+      --text: #1a2e1a;
+      --text2: #4a6a4a;
+      --text3: #7a9a7a;
+      --green-dark: #1B5E20;
+      --green: #2E7D32;
+      --green-mid: #43A047;
+      --green-light: #E8F5E9;
+      --green-pale: #F1F8F1;
+      --accent: #FF6F00;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 60%, #388E3C 100%);
+      color: white;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -30px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .header-flag { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    header h1 {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.3rem;
+    }
+    header p { font-size: 0.95rem; opacity: 0.85; }
+    .header-badges {
+      display: flex; justify-content: center; gap: 8px;
+      margin-top: 1rem; flex-wrap: wrap;
+    }
+    .header-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* MAIN */
+    main { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    /* TABS */
+    .tabs {
+      display: flex; gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 6px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .tab {
+      flex: 1; min-width: 100px;
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      transition: all 0.2s;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .tab:hover { background: var(--green-pale); color: var(--green); }
+    .tab.active { background: var(--green); color: white; box-shadow: 0 2px 8px rgba(46,125,50,0.3); }
+
+    /* SECTIONS */
+    .section { display: none; }
+    .section.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* GRID */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+
+    /* CARD */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .card-title {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: var(--text3); margin-bottom: 1.2rem;
+    }
+
+    /* FORM */
+    .field { margin-bottom: 14px; }
+    label { display: block; font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 5px; }
+    input[type="number"], select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px; font-family: 'Nunito', sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input[type="number"]:focus, select:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(46,125,50,0.12);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a6a4a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+
+    /* REGIME TOGGLE */
+    .regime-toggle { display: flex; gap: 8px; }
+    .regime-btn {
+      flex: 1; padding: 9px;
+      border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--surface2);
+      color: var(--text2);
+      transition: all 0.15s; text-align: center;
+    }
+    .regime-btn:hover { border-color: var(--green-mid); color: var(--green); }
+    .regime-btn.active { background: var(--green); border-color: var(--green); color: white; }
+
+    /* BUTTON */
+    .btn {
+      width: 100%; padding: 12px;
+      background: var(--green);
+      color: white; border: none;
+      border-radius: var(--radius-sm);
+      font-size: 15px; font-weight: 700;
+      font-family: 'Nunito', sans-serif;
+      cursor: pointer; margin-top: 6px;
+      transition: background 0.15s, transform 0.1s;
+      letter-spacing: 0.3px;
+    }
+    .btn:hover { background: var(--green-dark); }
+    .btn:active { transform: scale(0.98); }
+
+    /* RESULT */
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 12px;
+    }
+    .res-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .res-row:last-child { border-bottom: none; }
+    .res-label { color: var(--text2); }
+    .res-val { color: var(--text); font-weight: 600; }
+    .res-val.highlight { color: var(--green); font-size: 18px; font-weight: 700; }
+    .res-divider { height: 1px; background: var(--border2); margin: 4px 0; }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--green-light);
+      border-left: 3px solid var(--green-mid);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--green-dark);
+      line-height: 1.6;
+    }
+
+    /* SLAB TABLE */
+    .slab-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+    .slab-table th {
+      background: var(--green-light); color: var(--green-dark);
+      font-weight: 700; padding: 9px 12px;
+      text-align: left; border: 1px solid #C8E6C9;
+    }
+    .slab-table td { padding: 8px 12px; border: 1px solid var(--border); }
+    .slab-table tr:nth-child(even) td { background: var(--green-pale); }
+
+    /* SUMMARY STRIP */
+    .summary-strip {
+      background: var(--green-light);
+      border: 1px solid #C8E6C9;
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      display: flex; justify-content: space-around; flex-wrap: wrap; gap: 12px;
+      margin-bottom: 16px;
+    }
+    .strip-item { text-align: center; }
+    .strip-label { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .strip-val { font-size: 20px; font-weight: 700; color: var(--green-dark); margin-top: 2px; }
+
+    .hidden { display: none; }
+    .mt { margin-top: 12px; }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 1.5rem;
+      font-size: 12px; color: var(--text3);
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-flag">🇮🇳</div>
+  <h1>India Tax Calculator</h1>
+  <p>Income Tax · GST · TDS — Assessment Year 2025-26</p>
+  <div class="header-badges">
+    <span class="header-badge">FY 2024-25</span>
+    <span class="header-badge">New &amp; Old Regime</span>
+    <span class="header-badge">Free &amp; Offline</span>
+  </div>
+</header>
+
+<main>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('income')">📊 Income Tax</button>
+    <button class="tab" onclick="switchTab('gst')">🛒 GST</button>
+    <button class="tab" onclick="switchTab('tds')">📋 TDS</button>
+    <button class="tab" onclick="switchTab('slabs')">📖 Tax Slabs</button>
+  </div>
+
+  <!-- ═══════════════ INCOME TAX ═══════════════ -->
+  <div class="section active" id="income">
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">Income Details</p>
+        <div class="field">
+          <label>Annual Gross Income (₹)</label>
+          <input type="number" id="it_income" placeholder="e.g. 1200000" value="1200000">
+        </div>
+        <div class="field">
+          <label>Age Group</label>
+          <select id="it_age">
+            <option value="general">Below 60 years</option>
+            <option value="senior">60–79 years (Senior Citizen)</option>
+            <option value="supersenior">80+ years (Super Senior Citizen)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tax Regime</label>
+          <div class="regime-toggle">
+            <div class="regime-btn active" id="r_new" onclick="setRegime('new')">New Regime</div>
+            <div class="regime-btn" id="r_old" onclick="setRegime('old')">Old Regime</div>
+          </div>
+        </div>
+        <div class="field hidden" id="deductions_field">
+          <label>Total Deductions (80C, HRA, NPS etc.) (₹)</label>
+          <input type="number" id="it_ded" placeholder="e.g. 150000" value="150000">
+        </div>
+        <button class="btn" onclick="calcIT()">Calculate Income Tax →</button>
+      </div>
+
+      <div id="it_result" class="hidden">
+        <div class="summary-strip" id="it_strip"></div>
+        <div class="result-card">
+          <p class="card-title">Detailed Breakdown</p>
+          <div id="it_rows"></div>
+        </div>
+        <div class="info-box" id="it_tip"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ GST ═══════════════ -->
+  <div class="section" id="gst">
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">GST Details</p>
+        <div class="field">
+          <label>Amount (₹)</label>
+          <input type="number" id="gst_amount" placeholder="e.g. 10000" value="10000">
+        </div>
+        <div class="field">
+          <label>GST Rate</label>
+          <select id="gst_rate">
+            <option value="0">0% — Essential / Exempt goods</option>
+            <option value="5">5% — Basic necessities</option>
+            <option value="12">12% — Standard goods</option>
+            <option value="18" selected>18% — Most services &amp; goods</option>
+            <option value="28">28% — Luxury / demerit goods</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Calculation Type</label>
+          <select id="gst_type">
+            <option value="excl">Add GST (amount is GST-exclusive)</option>
+            <option value="incl">Remove GST (amount is GST-inclusive)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Transaction Type</label>
+          <select id="gst_trans">
+            <option value="intra">Intra-state (CGST + SGST)</option>
+            <option value="inter">Inter-state (IGST only)</option>
+          </select>
+        </div>
+        <button class="btn" onclick="calcGST()">Calculate GST →</button>
+      </div>
+
+      <div id="gst_result" class="hidden">
+        <div class="summary-strip" id="gst_strip"></div>
+        <div class="result-card">
+          <p class="card-title">GST Breakdown</p>
+          <div id="gst_rows"></div>
+        </div>
+        <div class="info-box" id="gst_tip"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ TDS ═══════════════ -->
+  <div class="section" id="tds">
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">TDS Details</p>
+        <div class="field">
+          <label>Payment / Income Type</label>
+          <select id="tds_type" onchange="updateTDSRate()">
+            <option value="salary">Salary (Sec. 192)</option>
+            <option value="interest">Interest on Securities (Sec. 193)</option>
+            <option value="dividend">Dividend (Sec. 194)</option>
+            <option value="fd_interest">Interest – FD / Savings (Sec. 194A)</option>
+            <option value="lottery">Lottery / Game Prize (Sec. 194B)</option>
+            <option value="contractor">Contractor Payment (Sec. 194C)</option>
+            <option value="insurance">Insurance Commission (Sec. 194D)</option>
+            <option value="rent">Rent – Plant / Machinery (Sec. 194I)</option>
+            <option value="rent_prop">Rent – Land / Building (Sec. 194I)</option>
+            <option value="professional">Professional / Technical Fees (Sec. 194J)</option>
+            <option value="property">Immovable Property Sale (Sec. 194IA)</option>
+            <option value="ecommerce">E-commerce Operator (Sec. 194O)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Gross Payment Amount (₹)</label>
+          <input type="number" id="tds_amount" placeholder="e.g. 500000" value="500000">
+        </div>
+        <div class="field">
+          <label>TDS Rate (%)</label>
+          <input type="number" id="tds_rate" value="10" step="0.1">
+        </div>
+        <div class="field">
+          <label>Payee PAN Available?</label>
+          <select id="tds_pan">
+            <option value="yes">Yes – Normal rate applies</option>
+            <option value="no">No – Higher rate applies (20% or 2x)</option>
+          </select>
+        </div>
+        <button class="btn" onclick="calcTDS()">Calculate TDS →</button>
+      </div>
+
+      <div id="tds_result" class="hidden">
+        <div class="summary-strip" id="tds_strip"></div>
+        <div class="result-card">
+          <p class="card-title">TDS Breakdown</p>
+          <div id="tds_rows"></div>
+        </div>
+        <div class="info-box" id="tds_tip"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ SLABS ═══════════════ -->
+  <div class="section" id="slabs">
+    <div class="grid2">
+      <div class="card">
+        <p class="card-title">New Tax Regime — FY 2024-25 (Default)</p>
+        <table class="slab-table">
+          <thead><tr><th>Taxable Income</th><th>Rate</th></tr></thead>
+          <tbody>
+            <tr><td>Up to ₹3,00,000</td><td>Nil</td></tr>
+            <tr><td>₹3,00,001 – ₹7,00,000</td><td>5%</td></tr>
+            <tr><td>₹7,00,001 – ₹10,00,000</td><td>10%</td></tr>
+            <tr><td>₹10,00,001 – ₹12,00,000</td><td>15%</td></tr>
+            <tr><td>₹12,00,001 – ₹15,00,000</td><td>20%</td></tr>
+            <tr><td>Above ₹15,00,000</td><td>30%</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box mt">
+          ✅ Standard deduction ₹75,000 available.<br>
+          ✅ Rebate u/s 87A: up to ₹25,000 for taxable income ≤ ₹7,00,000.<br>
+          ❌ Most exemptions &amp; deductions not allowed.
+        </div>
+      </div>
+      <div class="card">
+        <p class="card-title">Old Tax Regime (Below 60 years)</p>
+        <table class="slab-table">
+          <thead><tr><th>Taxable Income</th><th>Rate</th></tr></thead>
+          <tbody>
+            <tr><td>Up to ₹2,50,000</td><td>Nil</td></tr>
+            <tr><td>₹2,50,001 – ₹5,00,000</td><td>5%</td></tr>
+            <tr><td>₹5,00,001 – ₹10,00,000</td><td>20%</td></tr>
+            <tr><td>Above ₹10,00,000</td><td>30%</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box mt">
+          ✅ Rebate u/s 87A: up to ₹12,500 for taxable income ≤ ₹5,00,000.<br>
+          ✅ 80C (₹1.5L), HRA, NPS, LTA, home loan interest etc. allowed.<br>
+          ✅ Senior Citizen exempt up to ₹3L; Super Senior up to ₹5L.
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt">
+      <p class="card-title">Surcharge on Income Tax</p>
+      <table class="slab-table">
+        <thead><tr><th>Taxable Income</th><th>Surcharge Rate</th></tr></thead>
+        <tbody>
+          <tr><td>Up to ₹50,00,000</td><td>Nil</td></tr>
+          <tr><td>₹50,00,001 – ₹1,00,00,000</td><td>10%</td></tr>
+          <tr><td>₹1,00,00,001 – ₹2,00,00,000</td><td>15%</td></tr>
+          <tr><td>₹2,00,00,001 – ₹5,00,00,000</td><td>25%</td></tr>
+          <tr><td>Above ₹5,00,00,000</td><td>37% (Old) / 25% (New)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card mt">
+      <p class="card-title">GST Rate Categories</p>
+      <table class="slab-table">
+        <thead><tr><th>Rate</th><th>Category</th><th>Common Examples</th></tr></thead>
+        <tbody>
+          <tr><td><strong>0%</strong></td><td>Exempt / Nil</td><td>Fresh milk, eggs, vegetables, grains, books, newspapers</td></tr>
+          <tr><td><strong>5%</strong></td><td>Basic necessities</td><td>Sugar, edible oil, packaged food, medicines, transport</td></tr>
+          <tr><td><strong>12%</strong></td><td>Standard goods</td><td>Butter, cheese, processed food, smartphones, business class</td></tr>
+          <tr><td><strong>18%</strong></td><td>Most services</td><td>IT services, restaurants, telecom, banking, AC hotels</td></tr>
+          <tr><td><strong>28%</strong></td><td>Luxury / demerit</td><td>Cars, tobacco, aerated drinks, casinos, 5-star hotels</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card mt">
+      <p class="card-title">Common TDS Rates (FY 2024-25)</p>
+      <table class="slab-table">
+        <thead><tr><th>Section</th><th>Nature of Payment</th><th>Rate</th><th>Threshold</th></tr></thead>
+        <tbody>
+          <tr><td>192</td><td>Salary</td><td>Slab rate</td><td>Basic exemption</td></tr>
+          <tr><td>194A</td><td>Interest (FD / bank)</td><td>10%</td><td>₹40,000 / ₹50,000 (senior)</td></tr>
+          <tr><td>194B</td><td>Lottery / prize money</td><td>30%</td><td>₹10,000</td></tr>
+          <tr><td>194C</td><td>Contractor / sub-contractor</td><td>1% / 2%</td><td>₹30,000 single / ₹1L annual</td></tr>
+          <tr><td>194D</td><td>Insurance commission</td><td>5%</td><td>₹15,000</td></tr>
+          <tr><td>194I</td><td>Rent</td><td>2% / 10%</td><td>₹2,40,000 p.a.</td></tr>
+          <tr><td>194J</td><td>Professional / technical fees</td><td>10%</td><td>₹30,000</td></tr>
+          <tr><td>194IA</td><td>Immovable property purchase</td><td>1%</td><td>₹50,00,000</td></tr>
+          <tr><td>194O</td><td>E-commerce operator</td><td>1%</td><td>₹5,00,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<footer>
+  ⚠️ For reference &amp; educational purposes only. Tax laws are subject to change. Please consult a Chartered Accountant for official tax advice. | AY 2025-26
+</footer>
+
+<script>
+  let regime = 'new';
+
+  function switchTab(t) {
+    document.querySelectorAll('.tab').forEach(e => e.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(e => e.classList.remove('active'));
+    const tabs = ['income', 'gst', 'tds', 'slabs'];
+    document.querySelectorAll('.tab')[tabs.indexOf(t)].classList.add('active');
+    document.getElementById(t).classList.add('active');
+  }
+
+  function setRegime(r) {
+    regime = r;
+    document.getElementById('r_new').classList.toggle('active', r === 'new');
+    document.getElementById('r_old').classList.toggle('active', r === 'old');
+    document.getElementById('deductions_field').classList.toggle('hidden', r !== 'old');
+  }
+
+  function fmt(n) {
+    return '₹' + Math.round(n).toLocaleString('en-IN');
+  }
+
+  function row(label, val, highlight) {
+    return `<div class="res-row">
+      <span class="res-label">${label}</span>
+      <span class="res-val${highlight ? ' highlight' : ''}">${val}</span>
+    </div>`;
+  }
+
+  function strip(items) {
+    return items.map(([label, val]) =>
+      `<div class="strip-item"><div class="strip-label">${label}</div><div class="strip-val">${val}</div></div>`
+    ).join('');
+  }
+
+  /* ── INCOME TAX ── */
+  function calcIT() {
+    const gross = parseFloat(document.getElementById('it_income').value) || 0;
+    const age = document.getElementById('it_age').value;
+    const ded = regime === 'old' ? (parseFloat(document.getElementById('it_ded').value) || 0) : 0;
+    const stdDed = regime === 'new' ? 75000 : 50000;
+    const taxable = Math.max(0, gross - stdDed - (regime === 'old' ? ded : 0));
+
+    let tax = 0;
+    let breakdown = [];
+
+    if (regime === 'new') {
+      const slabs = [
+        [300000, 0, 'Up to ₹3L'],
+        [400000, 0.05, '₹3L–₹7L'],
+        [300000, 0.10, '₹7L–₹10L'],
+        [200000, 0.15, '₹10L–₹12L'],
+        [300000, 0.20, '₹12L–₹15L'],
+        [Infinity, 0.30, 'Above ₹15L']
+      ];
+      let rem = taxable;
+      for (let [s, r, label] of slabs) {
+        if (rem <= 0) break;
+        const chunk = Math.min(rem, s);
+        const t = chunk * r;
+        if (t > 0) breakdown.push([`${label} @ ${r * 100}%`, t]);
+        tax += t; rem -= chunk;
+      }
+      if (taxable <= 700000 && tax > 0) {
+        breakdown.push(['Rebate u/s 87A', -tax]);
+        tax = 0;
+      }
+    } else {
+      const exempt = age === 'supersenior' ? 500000 : age === 'senior' ? 300000 : 250000;
+      const exemptLabel = age === 'supersenior' ? '₹5L' : age === 'senior' ? '₹3L' : '₹2.5L';
+      const slabs = [
+        [250000, 0.05, `${exemptLabel}–₹5L`],
+        [500000, 0.20, '₹5L–₹10L'],
+        [Infinity, 0.30, 'Above ₹10L']
+      ];
+      let base = exempt, rem = Math.max(0, taxable - exempt);
+      for (let [s, r, label] of slabs) {
+        if (rem <= 0) break;
+        const chunk = Math.min(rem, s);
+        const t = chunk * r;
+        if (t > 0) breakdown.push([`${label} @ ${r * 100}%`, t]);
+        tax += t; rem -= chunk; base += s;
+      }
+      if (taxable <= 500000 && tax > 0) {
+        const rebate = Math.min(tax, 12500);
+        breakdown.push(['Rebate u/s 87A', -rebate]);
+        tax = Math.max(0, tax - rebate);
+      }
+    }
+
+    // Surcharge
+    let surcharge = 0;
+    if (gross > 50000000) { surcharge = tax * (regime === 'new' ? 0.25 : 0.37); breakdown.push(['Surcharge 37%/25%', surcharge]); }
+    else if (gross > 20000000) { surcharge = tax * 0.25; breakdown.push(['Surcharge 25%', surcharge]); }
+    else if (gross > 10000000) { surcharge = tax * 0.15; breakdown.push(['Surcharge 15%', surcharge]); }
+    else if (gross > 5000000) { surcharge = tax * 0.10; breakdown.push(['Surcharge 10%', surcharge]); }
+    tax += surcharge;
+
+    const cess = tax * 0.04;
+    breakdown.push(['Health & Education Cess 4%', cess]);
+    tax += cess;
+
+    const net = gross - tax;
+    const eff = gross > 0 ? (tax / gross * 100).toFixed(2) : 0;
+
+    let html = row('Gross Income', fmt(gross));
+    html += row('Standard Deduction', '-' + fmt(stdDed));
+    if (regime === 'old' && ded > 0) html += row('Chapter VI-A Deductions', '-' + fmt(ded));
+    html += row('Taxable Income', fmt(taxable));
+    html += '<div class="res-divider"></div>';
+    for (let [l, v] of breakdown) html += row(l, v < 0 ? '-' + fmt(-v) : fmt(v));
+    html += '<div class="res-divider"></div>';
+    html += row('Total Tax Payable', fmt(tax), true);
+    html += row('Net In-hand Income', fmt(net));
+    html += row('Effective Tax Rate', eff + '%');
+
+    document.getElementById('it_rows').innerHTML = html;
+    document.getElementById('it_strip').innerHTML = strip([
+      ['Tax Payable', fmt(tax)],
+      ['In-hand', fmt(net)],
+      ['Effective Rate', eff + '%'],
+      ['Monthly Take-home', fmt(net / 12)]
+    ]);
+    document.getElementById('it_tip').innerHTML =
+      `<strong>Regime:</strong> ${regime === 'new' ? 'New Regime (FY 2024-25)' : 'Old Regime'} &nbsp;|&nbsp; <strong>Tax:</strong> ${fmt(tax)} &nbsp;|&nbsp; <strong>Monthly in-hand:</strong> ${fmt(net / 12)}/month<br>
+      <span style="font-size:12px;opacity:0.8">Tip: Compare both regimes to find your best option. Switch above to see Old Regime tax.</span>`;
+    document.getElementById('it_result').classList.remove('hidden');
+  }
+
+  /* ── GST ── */
+  function calcGST() {
+    const amt = parseFloat(document.getElementById('gst_amount').value) || 0;
+    const rate = parseFloat(document.getElementById('gst_rate').value);
+    const type = document.getElementById('gst_type').value;
+    const trans = document.getElementById('gst_trans').value;
+    let base, gstAmt;
+    if (type === 'excl') { base = amt; gstAmt = base * rate / 100; }
+    else { base = amt / (1 + rate / 100); gstAmt = amt - base; }
+    const total = base + gstAmt;
+
+    let html = row('Base Amount (Pre-GST)', fmt(base));
+    if (trans === 'intra') {
+      html += row(`CGST @ ${rate / 2}%`, fmt(gstAmt / 2));
+      html += row(`SGST @ ${rate / 2}%`, fmt(gstAmt / 2));
+    } else {
+      html += row(`IGST @ ${rate}%`, fmt(gstAmt));
+    }
+    html += '<div class="res-divider"></div>';
+    html += row('Total GST', fmt(gstAmt));
+    html += row(type === 'excl' ? 'Total Payable (incl. GST)' : 'Base + GST = Original', fmt(total), true);
+
+    document.getElementById('gst_rows').innerHTML = html;
+    document.getElementById('gst_strip').innerHTML = strip([
+      ['Base Amount', fmt(base)],
+      ['GST Amount', fmt(gstAmt)],
+      ['Total', fmt(total)]
+    ]);
+    document.getElementById('gst_tip').innerHTML =
+      `GST of <strong>${fmt(gstAmt)}</strong> at <strong>${rate}%</strong> on base of <strong>${fmt(base)}</strong>.<br>
+      ${trans === 'intra' ? `Split equally: CGST ${fmt(gstAmt / 2)} + SGST ${fmt(gstAmt / 2)} for intra-state.` : `IGST ${fmt(gstAmt)} applies for inter-state transactions.`}`;
+    document.getElementById('gst_result').classList.remove('hidden');
+  }
+
+  /* ── TDS ── */
+  const tdsRatesMap = {
+    salary: 10, interest: 10, dividend: 10, fd_interest: 10,
+    lottery: 30, contractor: 2, insurance: 5, rent: 10,
+    rent_prop: 10, professional: 10, property: 1, ecommerce: 1
+  };
+  const tdsLabels = {
+    salary: 'Salary (Sec. 192)', interest: 'Interest on Securities (Sec. 193)',
+    dividend: 'Dividend (Sec. 194)', fd_interest: 'FD/Savings Interest (Sec. 194A)',
+    lottery: 'Lottery/Prize (Sec. 194B)', contractor: 'Contractor (Sec. 194C)',
+    insurance: 'Insurance Commission (Sec. 194D)', rent: 'Rent – Plant/Machinery (Sec. 194I)',
+    rent_prop: 'Rent – Land/Building (Sec. 194I)', professional: 'Professional Fees (Sec. 194J)',
+    property: 'Immovable Property (Sec. 194IA)', ecommerce: 'E-commerce (Sec. 194O)'
+  };
+
+  function updateTDSRate() {
+    const t = document.getElementById('tds_type').value;
+    document.getElementById('tds_rate').value = tdsRatesMap[t] || 10;
+  }
+
+  function calcTDS() {
+    const amt = parseFloat(document.getElementById('tds_amount').value) || 0;
+    let rate = parseFloat(document.getElementById('tds_rate').value) || 0;
+    const pan = document.getElementById('tds_pan').value;
+    const type = document.getElementById('tds_type').value;
+    let panNote = '';
+    if (pan === 'no') {
+      const higher = Math.max(rate * 2, 20);
+      panNote = ` → increased to ${higher}% (no PAN)`;
+      rate = higher;
+    }
+    const tds = amt * rate / 100;
+    let surcharge = 0;
+    if (amt > 10000000) { surcharge = tds * 0.10; }
+    const cess = (tds + surcharge) * 0.04;
+    const total = tds + surcharge + cess;
+    const net = amt - total;
+
+    let html = row('Gross Payment Amount', fmt(amt));
+    html += row(`TDS Rate Applied`, rate + '%' + panNote);
+    html += row('TDS Amount', fmt(tds));
+    if (surcharge > 0) html += row('Surcharge 10%', fmt(surcharge));
+    if (cess > 0) html += row('Health & Education Cess 4%', fmt(cess));
+    html += '<div class="res-divider"></div>';
+    html += row('Total TDS Deduction', fmt(total), true);
+    html += row('Net Amount to Payee', fmt(net));
+    html += row('Deduction %', (total / amt * 100).toFixed(2) + '%');
+
+    document.getElementById('tds_rows').innerHTML = html;
+    document.getElementById('tds_strip').innerHTML = strip([
+      ['Gross Amount', fmt(amt)],
+      ['TDS Deducted', fmt(total)],
+      ['Net to Payee', fmt(net)]
+    ]);
+    document.getElementById('tds_tip').innerHTML =
+      `<strong>${tdsLabels[type] || type}:</strong> TDS of <strong>${fmt(total)}</strong> will be deducted and deposited with the government. 
+      The payee receives <strong>${fmt(net)}</strong>. TDS certificate (Form 16/16A) to be issued by deductor.`;
+    document.getElementById('tds_result').classList.remove('hidden');
+  }
+</script>
+</body>
+</html>
